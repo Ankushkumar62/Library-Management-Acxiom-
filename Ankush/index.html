@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        /* Basic styles for better formatting */
+        body { font-family: Arial, sans-serif; }
+        .error { color: red; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Library Management System</h1>
+        <a href="#chart">View Flow Chart</a> <!-- Link to flow chart -->
+    </header>
+
+    <main>
+        <section id="login">
+            <h2>Login</h2>
+            <form onsubmit="return validateLogin()">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </section>
+
+        <section id="book-issue">
+            <h2>Issue Book</h2>
+            <form onsubmit="return validateBookIssue()">
+                <div class="form-group">
+                    <label for="bookName">Name of Book:</label>
+                    <input type="text" id="bookName" required>
+                </div>
+                <div class="form-group">
+                    <label for="authorName">Author Name:</label>
+                    <input type="text" id="authorName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="issueDate">Issue Date:</label>
+                    <input type="date" id="issueDate" required min="<?= date('Y-m-d') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="returnDate">Return Date:</label>
+                    <input type="date" id="returnDate" required>
+                </div>
+                <button type="submit">Issue Book</button>
+                <div class="error" id="issueError"></div>
+            </form>
+        </section>
+
+        <!-- Additional sections for Return Book, Add Membership, etc. -->
+        
+    </main>
+
+    <script>
+        function validateLogin() {
+            // Validation logic for login
+            return true; // Proceed with form submission
+        }
+
+        function validateBookIssue() {
+            const bookName = document.getElementById('bookName').value;
+            const issueDate = new Date(document.getElementById('issueDate').value);
+            const today = new Date();
+            const returnDate = new Date(document.getElementById('returnDate').value);
+            const issueError = document.getElementById('issueError');
+            
+            // Validate if book name is provided
+            if (!bookName) {
+                issueError.textContent = "Please enter the name of the book.";
+                return false;
+            }
+            // Validate issue date
+            if (issueDate < today) {
+                issueError.textContent = "Issue date cannot be in the past.";
+                return false;
+            }
+            // Validate return date
+            if (returnDate > new Date(today.setDate(today.getDate() + 15))) {
+                issueError.textContent = "Return date cannot be more than 15 days from today.";
+                return false;
+            }
+            issueError.textContent = ""; // Clear previous errors
+            return true; // Proceed with form submission
+        }
+    </script>
+
+</body>
+</html>
